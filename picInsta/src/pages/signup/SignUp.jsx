@@ -1,4 +1,10 @@
-import React from 'react';
+import React,{useState} from 'react';
+// import authService from '../appwrite/auth'
+// import { Link, useNavigate } from 'react-router-dom'
+// import { login } from '../store/authSlice'
+// import {Button, Input, Logo} from "./index.js"
+import { useDispatch } from 'react-redux'
+import { useForm } from 'react-hook-form'
 import {
   MDBBtn,
   MDBContainer,
@@ -13,6 +19,27 @@ import {
   from 'mdb-react-ui-kit';
 
 function SignUp() {
+  // const navigate = useNavigate()
+  const [error, setError] = useState("")
+  const dispatch = useDispatch()
+  const {register, handleSubmit} = useForm()
+
+  
+  const create = async(data) => {
+    setError("")
+    try {
+        const userdata = await authService.createAccount(data)
+        if (userdata) {
+            const userData = await authService.getCurrentUser()
+            if(userData) dispatch(login(userData));
+            navigate("/")
+            
+        }
+    } catch (error) {
+        setError(error.message)
+    }
+}
+
   return (
     <MDBContainer fluid>
 
